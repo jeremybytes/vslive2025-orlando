@@ -65,6 +65,7 @@ You will learn:
 * Find out whether you are an under-abstractor or over-abstractor.  
 
 Resources:  
-* *Coming soon!*
+* Slides: [/VSH04-abstract-art/SLIDES-AbstractArt.pdf](./VSH04-abstract-art/SLIDES-AbstractArt.pdf)  
+* Code Samples: [/VSH04-abstract-art/CodeSamples/](./VSH04-abstract-art/CodeSamples/)
 
 ---
