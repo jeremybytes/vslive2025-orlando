@@ -48,7 +48,8 @@ You will learn:
 * See LINQ lazy evaluation in action (and how to avoid "eager" evaluation).  
 
 Resources:  
-* *Coming soon!*
+* Slides: [/VSW16-linq/SLIDES-LINQ.pdf](./VSW16-linq/SLIDES-LINQ.pdf)  
+* Code Samples: [/VSW16-linq/CodeSamples/](./VSW16-linq/CodeSamples/)
 
 ---
 
