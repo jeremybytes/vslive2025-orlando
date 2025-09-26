@@ -41,14 +41,15 @@ internal partial class MainWindowViewModel : INotifyPropertyChanged
 
         if (NameFilterChecked)
         {
-            //People = Enumerable.Where(People, SelectPerson);
-            //People = People.Where(SelectPerson);
-            People = People.Where(p => p.GivenName == NameFilterValue);
+            People = People.Where(p => p.GivenName == nameFilterValue);
         }
 
         if (DateFilterChecked)
-            People = People.Where(p => p.StartDate.Year >= DateFilterStartYear)
-                           .Where(p => p.StartDate.Year <= DateFilterEndYear);
+        {
+            People = People
+                .Where(p => p.StartDate.Year >= DateFilterStartYear)
+                .Where(p => p.StartDate.Year <= DateFilterEndYear);
+        }
 
         if (FamilyNameSortChecked)
             People = People.OrderBy(p => p.FamilyName);
@@ -60,31 +61,34 @@ internal partial class MainWindowViewModel : INotifyPropertyChanged
             People = People.OrderBy(p => p.StartDate);
 
         if (RatingSortChecked)
-            People = People.OrderByDescending(p => p.Rating);
+            People = People.OrderBy(p => p.Rating);
 
         RaisePropertyChanged();
     }
 
-    //private bool SelectPerson(Person person)
-    //{
-    //    return person.GivenName == NameFilterValue;
-    //}
-
     public void ShowAverageRating()
     {
         var average = People.Average(p => p.Rating).ToString("#.#");
+
         ShowPopup("Average Rating", average);
     }
 
     public void ShowEarliestStartDate()
     {
-        var earliest = People.Min(p => p.StartDate).ToString("MM/dd/yyyy");
+        //var earliest = People.OrderBy(p => p.StartDate)
+        //                     .First()
+        //                     .StartDate
+        //                     .ToString("yyyy/MM/dd");
+
+        var earliest = People.Min(p => p.StartDate).ToString("yyyy/MM/dd");
+
         ShowPopup("Earliest Start Date", earliest);
     }
 
     public void ShowBestCommander()
     {
         var best = People.MaxBy(p => p.Rating);
+
         ShowPopup("Best Commander", best!.ToString());
     }
 }
