@@ -69,3 +69,20 @@ Resources:
 * Code Samples: [/VSH04-abstract-art/CodeSamples/](./VSH04-abstract-art/CodeSamples/)
 
 ---
+
+**VSH16 Patterns and Tools for Parallel Programming in C#**  
+*Level: Intermediate*  
+
+Are you ready to unlock the full potential of your CPU by harnessing the power of parallel programming in C#? This session delves into the world of parallel programming focusing specifically on the Task Parallel Library (TPL) and various patterns designed to optimize performance and maximize your CPU utilization. Join this session and learn how to push the boundaries of what's possible with C# and parallel programming!  
+
+You will learn:
+
+* Introduction to Parallel Programming in C#.  
+* Deep dive into the Task Parallel Library (TPL).    
+* Patterns for optimizing CPU usage.  
+
+Resources:  
+* Slides: [/VSH16-parallel-programming/SLIDES-ParallelPatternsAndTools.pdf](./VSH16-parallel-programming/SLIDES-ParallelPatternsAndTools.pdf)  
+* Code Samples: [/VSH16-parallel-programming/CodeSamples/](./VSH16-parallel-programming/CodeSamples/)
+
+---
