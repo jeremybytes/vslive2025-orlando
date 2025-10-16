@@ -144,11 +144,11 @@ public HouseController(Schedule schedule, ICommander commander)
 private static HouseController InitializeHouseController()
 {
         //45.6382,-122.7013 = Vancouver, WA, USA
-        //38.6530,-90.4084 = St. Louis, MO
-        //38.7698,-90.5050 = Embassy Suites, St. Charles, MO
+        //28.4810,-81.5074 = Orlando, FL
+        //28.4672,-81.4687 = Royal Pacific Hotel
 
     var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
-    var sunsetProvider = new SolarServiceSunsetProvider(38.6530,-90.4084);
+    var sunsetProvider = new SolarServiceSunsetProvider(28.4672,-81.4687);
     var schedule = new Schedule(fileName, sunsetProvider);
     var controller = new HouseController(schedule);
 
@@ -230,11 +230,11 @@ var controller = new HouseController(schedule, commander);
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 10:44:54 AM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 10:44:54 AM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 ```
 
@@ -244,23 +244,23 @@ If you let the `HouseControlAgent` continue to run, you will see the various tes
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 10:44:54 AM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 10:44:54 AM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 Device 3: On
-7/2/2025 10:45:54 AM - Device: 3, Command: On
+11/2/2025 10:45:54 AM - Device: 3, Command: On
 Schedule Items Processed: 1 - Total Items: 18 - Active Items: 6
 Device 5: On
-7/2/2025 10:46:54 AM - Device: 5, Command: On
+11/2/2025 10:46:54 AM - Device: 5, Command: On
 Schedule Items Processed: 1 - Total Items: 17 - Active Items: 5
 Device 3: Off
-7/2/2025 10:47:54 AM - Device: 3, Command: Off
+11/2/2025 10:47:54 AM - Device: 3, Command: Off
 Schedule Items Processed: 1 - Total Items: 16 - Active Items: 4
 Device 5: Off
-7/2/2025 10:48:54 AM - Device: 5, Command: Off
+11/2/2025 10:48:54 AM - Device: 5, Command: Off
 Schedule Items Processed: 1 - Total Items: 15 - Active Items: 3
 Schedule Items Processed: 0 - Total Items: 14 - Active Items: 2
 ```
@@ -443,11 +443,11 @@ controller.Commander = new FakeCommander();
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 10:56:38 AM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 10:56:38 AM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 ```
 
@@ -626,11 +626,11 @@ public Schedule(string filename, ISunsetProvider sunsetProvider)
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 11:02:57 AM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 11:02:57 AM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 ```
 
@@ -668,11 +668,11 @@ controller.Commander = new FakeCommander();
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 11:04:44 AM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 11:04:44 AM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 ```
 
@@ -781,14 +781,14 @@ The last step is to use the cache.
 8. In the `InitializeHouseController` method, create a new variable for the caching sunset provider, and use the `SolarTimesSunsetProvider` as a constructor parameter.
 
 ```csharp
-    var sunsetProvider = new SolarTimesSunsetProvider(51.520,-0.0963);
+    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
     var cachingSunsetProvider = new CachingSunsetProvider(sunsetProvider);
 ```
 
 9. Pass the caching sunset provider as a parameter to the schedule.
 
 ```csharp
-    var sunsetProvider = new SolarTimesSunsetProvider(38.6530, -90.4084);
+    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
     var cachingSunsetProvider = new CachingSunsetProvider(sunsetProvider);
     //var schedule = new Schedule(fileName, sunsetProvider);
     var schedule = new Schedule(fileName, cachingSunsetProvider);
@@ -805,11 +805,11 @@ Console.WriteLine($"Sunset Tomorrow: {sunset:G}");
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 11:09:41 AM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 11:09:41 AM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 ```
 
@@ -843,13 +843,13 @@ public DateTimeOffset GetSunset(DateTime date)
 
 ```
 Initializing Controller
-Caculating Sunset
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Calculating Sunset
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 11:11:13 AM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 11:11:13 AM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 ```
 

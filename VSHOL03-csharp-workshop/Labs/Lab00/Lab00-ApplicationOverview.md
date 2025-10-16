@@ -74,12 +74,12 @@ If you type "s" and press "Enter" in the console, then the active schedule items
 Initializing Controller
 Initialization Complete
 s
-7/2/2025 10:25:12 AM - Standard (00:00:00), Device: 3, Command: On
-7/2/2025 10:26:12 AM - Standard (00:00:00), Device: 5, Command: On
-7/2/2025 10:27:12 AM - Standard (00:00:00), Device: 3, Command: Off
-7/2/2025 10:28:12 AM - Standard (00:00:00), Device: 5, Command: Off
-7/2/2025 1:00:00 PM - Standard (00:00:00), Device: 3, Command: Off
-7/2/2025 1:00:00 PM - Standard (06:00:00), Device: 3, Command: On
+11/2/2025 10:25:12 AM - Standard (00:00:00), Device: 3, Command: On
+11/2/2025 10:26:12 AM - Standard (00:00:00), Device: 5, Command: On
+11/2/2025 10:27:12 AM - Standard (00:00:00), Device: 3, Command: Off
+11/2/2025 10:28:12 AM - Standard (00:00:00), Device: 5, Command: Off
+11/2/2025 1:00:00 PM - Standard (00:00:00), Device: 3, Command: Off
+11/2/2025 1:00:00 PM - Standard (06:00:00), Device: 3, Command: On
 ```
 
 In your output, you will see that a number of items are listed as 1 to 4 minutes in the future (based on the current time).  
@@ -104,11 +104,11 @@ To see the sunset service in action, make a small change to the application. Ope
 private static HouseController InitializeHouseController()
 {
         //45.6382,-122.7013 = Vancouver, WA, USA
-        //38.6530,-90.4084 = St. Louis, MO
-        //38.7698,-90.5050 = Embassy Suites, St. Charles, MO
+        //28.4810,-81.5074 = Orlando, FL
+        //28.4672,-81.4687 = Royal Pacific Hotel
 
     var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
-    var sunsetProvider = new SolarServiceSunsetProvider(38.6530,-90.4084);
+    var sunsetProvider = new SolarServiceSunsetProvider(28.4672,-81.4687);
     var schedule = new Schedule(fileName, sunsetProvider);
     var controller = new HouseController(schedule);
 
@@ -160,7 +160,7 @@ With the service running, go back an re-run the `HouseControlAgent` application.
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Initialization Complete
 ```
 
@@ -195,7 +195,7 @@ Now, rerun the application, and the exception will happen during the initializat
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Unhandled exception. System.IO.FileNotFoundException: Could not find file 'COM5'.
 ```
 

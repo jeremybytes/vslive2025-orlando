@@ -52,7 +52,7 @@ Keep scrolling for the step-by-step walkthrough. Or use the links below to jump 
 private static HouseController InitializeHouseController()
 {
     var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
-    var sunsetProvider = new SolarTimesSunsetProvider(38.6530, -90.4084);
+    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
     var cachingSunsetProvider = new CachingSunsetProvider(sunsetProvider);
     var schedule = new Schedule(fileName, cachingSunsetProvider);
     var controller = new HouseController(schedule);
@@ -165,7 +165,7 @@ The `SolarTimesSunsetProvider` needs latitude and longitude parameters.
 
 ```csharp
 //container.Bind<ISunsetProvider>().To<SolarTimesSunsetProvider>();
-var sunsetProvider = new SolarTimesSunsetProvider(38.6530, -90.4084);
+var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
 container.Bind<ISunsetProvider>().ToConstant(sunsetProvider);
 ```
 
@@ -175,11 +175,11 @@ container.Bind<ISunsetProvider>().ToConstant(sunsetProvider);
 
 ```
 Initializing Controller
-Sunset Tomorrow: 7/3/2025 9:29:57 PM
+Sunset Tomorrow: 11/1/2025 6:14:04 PM
 Device 5: On
-7/2/2025 2:15:36 PM - Device: 5, Command: On
+11/2/2025 10:44:54 AM - Device: 5, Command: On
 Device 5: Off
-7/2/2025 2:15:36 PM - Device: 5, Command: Off
+11/2/2025 10:44:54 AM - Device: 5, Command: Off
 Initialization Complete
 ```  
 
@@ -207,7 +207,7 @@ private static HouseController InitializeHouseController()
     var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
     container.Bind<string>().ToConstant(fileName);
 
-    var sunsetProvider = new SolarTimesSunsetProvider(51.520,-0.0963);
+    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
     container.Bind<ISunsetProvider>().ToConstant(sunsetProvider);
 
     var controller = container.Get<HouseController>();
@@ -269,7 +269,7 @@ Be sure to set back to "Debug" mode before continuing.
 20. Add caching back in. Change the binding for the `ISunsetProvider` to `CachingSunsetProvider`.  
 
 ```csharp
-var sunsetProvider = new SolarTimesSunsetProvider(28.4810,-81.5074);
+var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
 //container.Bind<ISunsetProvider>().ToConstant(sunsetProvider);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>();
 ```
@@ -304,7 +304,7 @@ In the next section, you will add configuration for the `SolarTimesSunsetProvide
 1. Right now, the `SolarTimesSunsetProvider` is created manually.
 
 ```csharp
-var sunsetProvider = new SolarTimesSunsetProvider(38.6530, -90.4084);
+var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
 ```
@@ -355,7 +355,7 @@ At this point, the application will not build.
 5. A build failure points to creating the `SolarTimesSunsetProvider` in the `InitializeHouseController` method that you were working with earlier.
 
 ```csharp
-var sunsetProvider = new SolarTimesSunsetProvider(38.6530, -90.4084);
+var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
 ```
@@ -365,7 +365,7 @@ The constructor parameters have changed.
 6. Create a `LatLongLocation` object for the constructor.  
 
 ```csharp
-var latLong = new LatLongLocation(38.6530, -90.4084);
+var latLong = new LatLongLocation(28.4672,-81.4687);
 var sunsetProvider = new SolarTimesSunsetProvider(latLong);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
@@ -376,7 +376,7 @@ The application will now build and run.
 7. Create a Ninject binding for the `LatLongLocation` type.  
 
 ```csharp
-var latLong = new LatLongLocation(38.6530, -90.4084);
+var latLong = new LatLongLocation(28.4672,-81.4687);
 container.Bind<LatLongLocation>().ToConstant(latLong);
 ```
 
@@ -402,7 +402,7 @@ The configuration looks a bit complex at first, but once you get comfortable wit
 10. Here is the final configuration section for `LatLongLocation`, `CachingSunsetProvider`, and `SolarTimesSunsetProvider`.  
 
 ```csharp
-var latLong = new LatLongLocation(38.6530, -90.4084);
+var latLong = new LatLongLocation(28.4672,-81.4687);
 container.Bind<LatLongLocation>().ToConstant(latLong);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(
@@ -541,7 +541,7 @@ private static HouseController InitializeHouseController()
     ScheduleFileName fileName = new(AppDomain.CurrentDomain.BaseDirectory + "ScheduleData");
     container.Bind<ScheduleFileName>().ToConstant(fileName);
 
-    var latLong = new LatLongLocation(38.6530, -90.4084);
+    var latLong = new LatLongLocation(28.4672,-81.4687);
     container.Bind<LatLongLocation>().ToConstant(latLong);
     container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
         .WithConstructorArgument<ISunsetProvider>(
