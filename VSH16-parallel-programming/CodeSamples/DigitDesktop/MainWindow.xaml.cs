@@ -8,7 +8,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Offset.Text = 6000.ToString();
-        RecordCount.Text = 390.ToString();
+        RecordCount.Text = 375.ToString();
         OutputSize.Text = "1.0";
 
         Loaded += MainWindow_Loaded;

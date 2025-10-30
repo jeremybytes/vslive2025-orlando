@@ -79,7 +79,7 @@ public abstract partial class RecognizerControl : UserControl
         {
             button.Background = redBrush;
             errors++;
-            ErrorBlock.Text = $"Errors: {errors}";
+            ErrorValue.Text = errors.ToString();
         }
 
         buttonContent.Children.Add(imageControl);
@@ -88,7 +88,7 @@ public abstract partial class RecognizerControl : UserControl
         panel.Children.Add(button);
 
         TimeSpan duration = timer.Elapsed;
-        TimingBlock.Text = $"Duration (seconds): {duration:s\\.fff}";
+        TimingValue.Text = duration.ToString("s\\.fff");
     }
 
     private void Button_MouseEnter(object sender, MouseEventArgs e)
