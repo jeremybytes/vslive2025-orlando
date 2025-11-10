@@ -119,7 +119,7 @@ private static HouseController InitializeHouseController()
 }
 ```
 
-At the top of this method are several latitude/longitude locations. These are used to calculate sunrise and sunset times. The locations include "Vancouver, WA, USA" (where I live), "St. Louis, MO", and the Embassy Suites Hotel. The location value is passed to the `SolarServiceSunsetProvider`. Make sure that the location is close to where your computer thinks you are, otherwise, you may get unexpected values for sunrise and sunset times.  
+At the top of this method are several latitude/longitude locations. These are used to calculate sunrise and sunset times. The locations include "Vancouver, WA, USA" (where I live), "Orlando, FL", and the "Royal Pacific Hotel". The location value is passed to the `SolarServiceSunsetProvider`. Make sure that the location is close to where your computer thinks you are, otherwise, you may get unexpected values for sunrise and sunset times.  
 
 Uncomment the 2 lines of code near the bottom:
 

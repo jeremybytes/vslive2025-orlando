@@ -55,7 +55,25 @@ Keep scrolling for the step-by-step walkthrough. Or use the links below to jump 
 
 ## Step-by-Step - Hardware Changes
 
-**Start the SolarCaculator.Service and HouseControlAgent projects** (as described in [Lab 00 - Application Overview](./Lab00-ApplicationOverview.md)). The application fails with the following exception:  
+**Start the SolarCaculator.Service** (as described in [Lab 00 - Application Overview](./Lab00-ApplicationOverview.md)).  
+
+> REMINDER: You can start the service from the command line: navigate to the `SolarCalculator.Service` project folder and type `dotnet run`.  
+
+```
+PS C:\...\Starter\SolarCalculator.Service> dotnet run
+Building...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:8973
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Development\Events\...\Labs\Lab01\dotnet8\Starter\SolarCalculator.Service
+```
+
+**Start the HouseControlAgent** project (either from Visual Studio or the command line). 
+The application fails with the following exception:  
 
 ```
 System.IO.FileNotFoundException: 'Could not find file 'COM5'.'
@@ -271,7 +289,7 @@ So you have successfully removed the need to have a physical device connected in
 
 You are currently passing the commander to the `HouseController` as a constructor parameter (i.e., using the Constructor Injection pattern). This works well in scenarios where you want to force someone to choose a dependency.  
 
-But in this situation, you have a commander that you always want to use at runtime (the `SerialCommander`), but you want to be able to override it when you are testing or do not have the hardware available (with a `FakeCommander`). For this, you can use a different pattern: Property Injection.  
+But in this situation, you have a commander that you always want to use in production (the `SerialCommander`), but you want to be able to override it when you are testing or do not have the hardware available (with a `FakeCommander`). For this, you can use a different pattern: Property Injection.  
 
 The overall idea is create a property that is initialized with a default dependency. If you do nothing, then the default is used. But you can change the property before using the class to inject different behavior.  
 
@@ -505,16 +523,14 @@ public class SolarServiceSunsetProvider : ISunsetProvider
 
 4. Open the NuGet manager (or look in the project file) to see the packages for the `HouseControl.Sunset` project.  
 
-You will find a reference to `SolarCalculator` by Daniel M. Porrey. This is the package you will use to calculate sunrise and sunset.  
+You will find a reference to `SolarCalculator` by Daniel M. Porrey. This is the package you will use to calculate sunrise and sunset.
 
-The main type in this package is the `SolarTimes` type, so use this for naming.
-
-5. Create a `SolarTimesSunsetProvider` class in the same project.
+5. Create a `LocalSunsetProvider` class in the same project.
 
 ```csharp
 namespace HouseControl.Sunset;
 
-public class SolarTimesSunsetProvider
+public class LocalSunsetProvider
 {
 }
 ```
@@ -522,7 +538,7 @@ public class SolarTimesSunsetProvider
 6. Add a reference to the `ISunsetProvider` interface.
 
 ```csharp
-public class SolarTimesSunsetProvider : ISunsetProvider
+public class LocalSunsetProvider : ISunsetProvider
 {
 }
 ```
@@ -530,7 +546,7 @@ public class SolarTimesSunsetProvider : ISunsetProvider
 7. Implement the 2 methods of the interface.
 
 ```csharp
-public class SolarTimesSunsetProvider : ISunsetProvider
+public class LocalSunsetProvider : ISunsetProvider
 {
     public DateTimeOffset GetSunrise(DateTime date)
     {
@@ -544,19 +560,19 @@ public class SolarTimesSunsetProvider : ISunsetProvider
 }
 ```
 
-The `SolarTimes` constructor takes a date, latitude, and longitude values.
+`SolarTimes` is the primary type in the `SolarCalculator` package. The `SolarTimes` constructor takes a date, latitude, and longitude values.
 
 8. Add fields for latitude and longitude values (type double), and a constructor that sets those values.  
 
 *Note: the `SolarServiceSunsetProvider` has these same fields and constructor parameters, so you can copy the bulk of it from that class.*  
 
 ```csharp
-public class SolarTimesSunsetProvider : ISunsetProvider
+public class LocalSunsetProvider : ISunsetProvider
 {
     private readonly double latitude;
     private readonly double longitude;
 
-    public SolarTimesSunsetProvider(double latitude, double longitude)
+    public LocalSunsetProvider(double latitude, double longitude)
     {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -654,11 +670,11 @@ This lets you know that the operation failed because the service is not running.
 
 20. Open the `Program.cs` file in the `HouseControlAgent` project.  
 
-21. Change the `sunsetProvider` variable from a `SolarServiceSunsetProvider` to `SolarTimesSunsetProvider`.  
+21. Change the `sunsetProvider` variable from a `SolarServiceSunsetProvider` to `LocalSunsetProvider`.  
 
 ```csharp
-//var sunsetProvider = new SolarServiceSunsetProvider(38.6530, -90.4084);
-var sunsetProvider = new SolarTimesSunsetProvider(38.6530, -90.4084);
+//var sunsetProvider = new SolarServiceSunsetProvider(28.4672,-81.4687);
+var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
 var schedule = new Schedule(fileName, sunsetProvider);
 var controller = new HouseController(schedule);
 controller.Commander = new FakeCommander();
@@ -688,7 +704,7 @@ For this, you can use the Decorator Pattern. This is a pattern where you wrap an
 
 The basics steps here are to create a caching provider that implements the `ISunsetProvider` interface. This class will also take an `ISunsetProvider` (the "real" provider) as a constructor parameter.  
 
-To use the cache, you change the composition root (where you put the loosely-coupled pieces together). This means that you do not need to change any of the classes that implement `ISunsetProvider` or any of the classes that depend on an `ISunsetProvider`.  
+To use the cache, you change the composition root (this is a dependency injection term that refers to the place you put the application pieces together -- in this case in the `Program.cs` file). This means that you do not need to change any of the classes that implement `ISunsetProvider` or any of the classes that depend on an `ISunsetProvider`.  
 
 1. Create a new `CachingSunsetProvider` class in the `HouseControl.Sunset` project.  
 
@@ -778,17 +794,17 @@ The last step is to use the cache.
 
 7. Open the `Program.cs` file in the `HouseControlAgent` project.  
 
-8. In the `InitializeHouseController` method, create a new variable for the caching sunset provider, and use the `SolarTimesSunsetProvider` as a constructor parameter.
+8. In the `InitializeHouseController` method, create a new variable for the caching sunset provider, and use the `LocalSunsetProvider` as a constructor parameter.
 
 ```csharp
-    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+    var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
     var cachingSunsetProvider = new CachingSunsetProvider(sunsetProvider);
 ```
 
 9. Pass the caching sunset provider as a parameter to the schedule.
 
 ```csharp
-    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+    var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
     var cachingSunsetProvider = new CachingSunsetProvider(sunsetProvider);
     //var schedule = new Schedule(fileName, sunsetProvider);
     var schedule = new Schedule(fileName, cachingSunsetProvider);
@@ -828,7 +844,7 @@ sunset = cachingSunsetProvider.GetSunset(DateTime.Today.AddDays(1));
 Console.WriteLine($"Sunset Tomorrow: {sunset:G}");
 ```
 
-* In the `SolarTimesSunsetProvider` class, update the `GetSunset` method to output to the console.  
+* In the `LocalSunsetProvider` class, update the `GetSunset` method to output to the console.  
 
 ```csharp
 public DateTimeOffset GetSunset(DateTime date)
@@ -853,11 +869,11 @@ Device 5: Off
 Initialization Complete
 ```
 
-Even though we call `GetSunset` twice, "Calculating Sunset" only appears once in our output. The second call uses the cache value from the caching sunset provider.  
+Even though you call `GetSunset` twice, "Calculating Sunset" only appears once in your output. The second call uses the cache value from the caching sunset provider.  
 
 * Before moving on, remove the code that you added in step 12 (the duplicate `GetSunset` call and console output).  
 
-By using the Decorator Pattern in conjuction with interfaces and dependency injection, you were able to add caching to an existing class. Note that you did not need to change the existing sunset providers (`SolarTimeSunsetProvider` or `SolarServiceSunsetProvider`). You also did not need to change the classes that use the sunset provider (`Schedule` and `ScheduleHelper`). In addition, the caching sunset provider will work with any existing or new provider that you may come up with.  
+By using the Decorator Pattern in conjuction with interfaces and dependency injection, you were able to add caching to an existing class. Note that you did not need to change the existing sunset providers (`LocalSunsetProvider` or `SolarServiceSunsetProvider`). You also did not need to change the classes that use the sunset provider (`Schedule` and `ScheduleHelper`). In addition, the caching sunset provider will work with any existing or new provider that you may come up with.  
 
 Pretty neat, huh?
 

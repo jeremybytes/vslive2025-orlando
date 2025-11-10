@@ -61,7 +61,7 @@ class Program
         container.Bind<LatLongLocation>().ToConstant(latLong);
         container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
             .WithConstructorArgument<ISunsetProvider>(
-                container.Get<SolarTimesSunsetProvider>());
+                container.Get<LocalSunsetProvider>());
 
 #if DEBUG
         container.Bind<HouseController>().ToSelf()

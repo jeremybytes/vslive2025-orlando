@@ -52,7 +52,7 @@ Keep scrolling for the step-by-step walkthrough. Or use the links below to jump 
 private static HouseController InitializeHouseController()
 {
     var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
-    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+    var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
     var cachingSunsetProvider = new CachingSunsetProvider(sunsetProvider);
     var schedule = new Schedule(fileName, cachingSunsetProvider);
     var controller = new HouseController(schedule);
@@ -73,7 +73,7 @@ Right now, all of the objects are created manually using "new". The goal is to h
     * `Schedule` => needs data filename and `ISunsetProvider`  
     * `CachingSunsetProvider` => needs `ISunsetProvider`  
     *Note, skip caching on the first pass and add it back in later*  
-    * `SolarTimesSunsetProvider` => needs latitude and longitude
+    * `LocalSunsetProvider` => needs latitude and longitude
 
 These are all of the object that we will need to configure.  
 
@@ -99,6 +99,8 @@ private static HouseController InitializeHouseController()
 var controller = container.Get<HouseController>();
 controller.Commander = new FakeCommander();
 ```
+
+>Instead of creating the `HouseController` object manually, you ask the container to create it for you. This lets the container do a lot of work for you (which you will see as you go).  
 
 Ninject does not have enough configuration information at this point, but it will tell us what we need.  
 
@@ -130,6 +132,8 @@ var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
 container.Bind<string>().ToConstant(fileName);
 ```
 
+This tells the container that if one of the object needs a `string` parameter, it should use the `fileName` as the value.  
+
 > Note: It is generally not good to bind to a general type like `string` because there are often multiple strings needed by various types. In this case, it will get you headed in the right direction, and you can deal with fixing it in a later step.  
 
 9. Run the application.  
@@ -147,25 +151,25 @@ This tells us that the `ISunsetProvider` needs to be configured in the container
 10. Create a binding configuration for `ISunsetProvider`. Bind it to the actual sunset provider (skip caching for now).  
 
 ```csharp
-container.Bind<ISunsetProvider>().To<SolarTimesSunsetProvider>();
+container.Bind<ISunsetProvider>().To<LocalSunsetProvider>();
 ```
 
 11. Run the application.
 
 ```
-  4) Injection of dependency double into parameter latitude of constructor of type SolarTimesSunsetProvider
+  4) Injection of dependency double into parameter latitude of constructor of type LocalSunsetProvider
   3) Injection of dependency ISunsetProvider into parameter sunsetProvider of constructor of type Schedule
   2) Injection of dependency Schedule into parameter schedule of constructor of type HouseController
   1) Request for HouseController
 ```
 
-The `SolarTimesSunsetProvider` needs latitude and longitude parameters.  
+The `LocalSunsetProvider` needs latitude and longitude parameters.  
 
-12. Create a hard-coded binding to a new `SolarTimesSunsetProvider` with the parameters filled in.  
+12. Create a hard-coded binding to a new `LocalSunsetProvider` with the parameters filled in.  
 
 ```csharp
-//container.Bind<ISunsetProvider>().To<SolarTimesSunsetProvider>();
-var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+//container.Bind<ISunsetProvider>().To<LocalSunsetProvider>();
+var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
 container.Bind<ISunsetProvider>().ToConstant(sunsetProvider);
 ```
 
@@ -207,7 +211,7 @@ private static HouseController InitializeHouseController()
     var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
     container.Bind<string>().ToConstant(fileName);
 
-    var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+    var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
     container.Bind<ISunsetProvider>().ToConstant(sunsetProvider);
 
     var controller = container.Get<HouseController>();
@@ -269,7 +273,7 @@ Be sure to set back to "Debug" mode before continuing.
 20. Add caching back in. Change the binding for the `ISunsetProvider` to `CachingSunsetProvider`.  
 
 ```csharp
-var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
 //container.Bind<ISunsetProvider>().ToConstant(sunsetProvider);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>();
 ```
@@ -288,23 +292,23 @@ The last line tells us a cyclical dependency is detected. This is because the `C
 22. Use `WithConstructorArgument` to set the parameter for the `CachingSunsetProvider`.  
 
 ```csharp
-var sunsetProvider = new SolarTimesSunsetProvider(28.4810,-81.5074);
+var sunsetProvider = new LocalSunsetProvider(28.4810,-81.5074);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
 ```
 
-This tells Ninject to use the `sunsetProvider` instance (`SolarTimesSunsetProvider`) as the constructor argument.  
+This tells Ninject to use the `sunsetProvider` instance (`LocalSunsetProvider`) as the constructor argument.  
 
 23. Rerun the application. The application runs and caching is in place. (You can follow the steps from Lab 01 to test caching again if you like).  
 
-In the next section, you will add configuration for the `SolarTimesSunsetProvider` so that you do not need to create it manually. But the parameters will need to be addressed first.  
+In the next section, you will add configuration for the `LocalSunsetProvider` so that you do not need to create it manually. But the parameters will need to be addressed first.  
 
 ## Step-by-Step - Injecting Location  
 
-1. Right now, the `SolarTimesSunsetProvider` is created manually.
+1. Right now, the `LocalSunsetProvider` is created manually.
 
 ```csharp
-var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
 ```
@@ -324,16 +328,16 @@ public record LatLongLocation(
 
 This code uses a record type for the 2 values. This belongs in the `HouseControl.Sunset` project because this is needed to calculate the sunrise and sunset times.  
 
-3. Change the constructor for the `SolarTimesSunsetProvider` to use the new type.  
+3. Change the constructor for the `LocalSunsetProvider` to use the new type.  
 
 ```csharp
-//public SolarTimesSunsetProvider(double latitude, double longitude)
+//public LocalSunsetProvider(double latitude, double longitude)
 //{
 //    this.latitude = latitude;
 //    this.longitude = longitude;
 //}
 
-public SolarTimesSunsetProvider(LatLongLocation latLong)
+public LocalSunsetProvider(LatLongLocation latLong)
 {
     latitude = latLong.Latitude;
     longitude = latLong.Longitude;
@@ -352,10 +356,10 @@ public SolarServiceSunsetProvider(LatLongLocation latLong)
 
 At this point, the application will not build.
 
-5. A build failure points to creating the `SolarTimesSunsetProvider` in the `InitializeHouseController` method that you were working with earlier.
+5. A build failure points to creating the `LocalSunsetProvider` in the `InitializeHouseController` method that you were working with earlier.
 
 ```csharp
-var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
 ```
@@ -366,7 +370,7 @@ The constructor parameters have changed.
 
 ```csharp
 var latLong = new LatLongLocation(28.4672,-81.4687);
-var sunsetProvider = new SolarTimesSunsetProvider(latLong);
+var sunsetProvider = new LocalSunsetProvider(latLong);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
 ```
@@ -380,11 +384,11 @@ var latLong = new LatLongLocation(28.4672,-81.4687);
 container.Bind<LatLongLocation>().ToConstant(latLong);
 ```
 
-8. Get the `SolarTimesSunsetProvider` from the Ninject container.  
+8. Get the `LocalSunsetProvider` from the Ninject container.  
 
 ```csharp
-//var sunsetProvider = new SolarTimesSunsetProvider(latLong);
-var sunsetProvider = container.Get<SolarTimesSunsetProvider>();
+//var sunsetProvider = new LocalSunsetProvider(latLong);
+var sunsetProvider = container.Get<LocalSunsetProvider>();
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(sunsetProvider);
 ```
@@ -394,22 +398,22 @@ container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
 ```csharp
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(
-        container.Get<SolarTimesSunsetProvider>());
+        container.Get<LocalSunsetProvider>());
 ```
 
 The configuration looks a bit complex at first, but once you get comfortable with using a dependency injection container, things look much more natural.  
 
-10. Here is the final configuration section for `LatLongLocation`, `CachingSunsetProvider`, and `SolarTimesSunsetProvider`.  
+10. Here is the final configuration section for `LatLongLocation`, `CachingSunsetProvider`, and `LocalSunsetProvider`.  
 
 ```csharp
 var latLong = new LatLongLocation(28.4672,-81.4687);
 container.Bind<LatLongLocation>().ToConstant(latLong);
 container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
     .WithConstructorArgument<ISunsetProvider>(
-        container.Get<SolarTimesSunsetProvider>());
+        container.Get<LocalSunsetProvider>());
 ```
 
-One thing to notice is that you do not have any specific binding configuration for the `SolarTimesSunsetProvider`. When you ask the container for the `SolarTimesSunsetProvider` (as the constructor argument), the container looks at the constructor, sees that it needs a `LatLongLocation` that is already configured, and takes care of the object creation for you.
+One thing to notice is that you do not have any specific binding configuration for the `LocalSunsetProvider`. When you ask the container for the `LocalSunsetProvider` (as the constructor argument), the container looks at the constructor, sees that it needs a `LatLongLocation` that is already configured, and takes care of the object creation for you.
 
 As a final step, you will add a bit of safety to the filename string configuration.  
 
@@ -545,7 +549,7 @@ private static HouseController InitializeHouseController()
     container.Bind<LatLongLocation>().ToConstant(latLong);
     container.Bind<ISunsetProvider>().To<CachingSunsetProvider>()
         .WithConstructorArgument<ISunsetProvider>(
-            container.Get<SolarTimesSunsetProvider>());
+            container.Get<LocalSunsetProvider>());
 
 #if DEBUG
     container.Bind<HouseController>().ToSelf()

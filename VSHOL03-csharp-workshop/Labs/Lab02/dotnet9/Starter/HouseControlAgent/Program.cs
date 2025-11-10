@@ -53,7 +53,7 @@ class Program
         //28.4672,-81.4687 = Royal Pacific Hotel
 
         var fileName = AppDomain.CurrentDomain.BaseDirectory + "ScheduleData";
-        var sunsetProvider = new SolarTimesSunsetProvider(28.4672,-81.4687);
+        var sunsetProvider = new LocalSunsetProvider(28.4672,-81.4687);
         var cachingSunsetProvider = new CachingSunsetProvider(sunsetProvider);
         var schedule = new Schedule(fileName, cachingSunsetProvider);
         var controller = new HouseController(schedule);

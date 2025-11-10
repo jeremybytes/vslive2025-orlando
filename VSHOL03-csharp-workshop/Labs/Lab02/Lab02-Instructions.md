@@ -632,6 +632,8 @@ public void MondayItemInPast_OnRollDay_IsTomorrow()
 ScheduleHelper helper = new(new FakeSunsetProvider());
 ```
 
+>Note: This uses the target-type new syntax and is equivalent to `new ScheduleHelper(new FakeSunsetProvider())`.
+
 5. Next create a `DateTimeOffset` that happens on a Monday (the date does not matter as long as it is in the past).  
 
 ```csharp
@@ -1331,7 +1333,7 @@ public void DurationFromNow_Time10MinutesInPast_Returns10Minutes()
 public List<ScheduleItem> GetCurrentScheduleItems()
 {
     return this.Where(si => si.IsEnabled &&
-        ScheduleHelper.DurationFromNow(si.Info.EventTime) < TimeSpan.FromSeconds(30))
+        scheduleHelper.DurationFromNow(si.Info.EventTime) < TimeSpan.FromSeconds(30))
         .ToList();
 }
 ```
