@@ -11,7 +11,7 @@ You will learn:
 
 ## Session Materials  
 * Slides: [SLIDES-AbstractArt.pdf](SLIDES-AbstractArt.pdf)  
-* Code Samples: [/CodeSamples](/CodeSamples/)
+* Code Samples: [CodeSamples/](CodeSamples/)
 
 ## Resources  
 * Article: [Are You an Over-Abstractor or an Under-Abstractor?](http://jeremybytes.blogspot.com/2014/12/are-you-over-abstractor-or-under.html)  

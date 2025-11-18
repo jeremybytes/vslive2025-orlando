@@ -11,7 +11,7 @@ You will learn:
 
 Session Materials:  
 * Slides: [SLIDES-ParallelPatternsAndTools.pdf](./SLIDES-ParallelPatternsAndTools.pdf)  
-* Code Samples: [/CodeSamples/](./CodeSamples/)  
+* Code Samples: [CodeSamples/](CodeSamples/)  
 
 Other Articles & Code Samples  
 * Session Materials: [Better Parallel Code with C# Channels](https://github.com/jeremybytes/csharp-channels-presentation)

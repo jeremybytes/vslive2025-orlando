@@ -10,8 +10,8 @@ You will learn:
 * See LINQ lazy evaluation in action (and how to avoid "eager" evaluation).  
 
 ## Session Materials  
-* [SLIDES-LINQ.pdf](SLIDES-LINQ.pdf)  
-* [/CodeSamples](/CodeSamples/)
+* Slides: [SLIDES-LINQ.pdf](SLIDES-LINQ.pdf)  
+* Code Samples: [CodeSamples/](CodeSamples/)
 
 ## Microsoft Docs
 * [Query Expression Syntax Table](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/standard-query-operators-overview#query-expression-syntax-table)  
