@@ -9,7 +9,7 @@ You will learn:
 * Deep dive into the Task Parallel Library (TPL).    
 * Patterns for optimizing CPU usage.  
 
-Resources:  
+Session Materials:  
 * Slides: [SLIDES-ParallelPatternsAndTools.pdf](./SLIDES-ParallelPatternsAndTools.pdf)  
 * Code Samples: [/CodeSamples/](./CodeSamples/)  
 
