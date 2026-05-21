@@ -100,7 +100,7 @@ public partial class MainWindow : Window
 
         int offset = int.Parse(Offset.Text);
         int recordCount = int.Parse(RecordCount.Text);
-        double displayMultipler = double.Parse(OutputSize.Text);
+        double displayMultiplier = double.Parse(OutputSize.Text);
 
         (DigitImage[] rawTrain, DigitImage[] rawValidation) = await Task.Run(() => FileLoader.GetData(fileName, offset, recordCount));
 
@@ -119,7 +119,7 @@ public partial class MainWindow : Window
         }
 
         // Left Panel (Panel 1)
-        var panel1Recognizer = GetLeftRecognizerControl();
+        var panel1Recognizer = GetLeftRecognizerControl(displayMultiplier);
         if (panel1Recognizer is not null)
         {
             LeftPanel.Children.Add(panel1Recognizer);
@@ -132,7 +132,7 @@ public partial class MainWindow : Window
         }
 
         // Right Panel (Panel 2)
-        var panel2Recognizer = GetRightRecognizerControl();
+        var panel2Recognizer = GetRightRecognizerControl(displayMultiplier);
         if (panel2Recognizer is not null)
         {
             RightPanel.Children.Add(panel2Recognizer);
@@ -146,23 +146,23 @@ public partial class MainWindow : Window
         MessageBox.Show("Done");
     }
 
-    private RecognizerControl? GetLeftRecognizerControl()
+    private RecognizerControl? GetLeftRecognizerControl(double displayMultiplier)
     {
         string classtype = GetComboBoxSelectedContent(LeftClassifier);
         string rectype = GetComboBoxSelectedTag(LeftControl);
         Type? recognizerType = Type.GetType(rectype);
         if (recognizerType is null) return null;
-        object? control = Activator.CreateInstance(recognizerType, new object[] { classtype, 1.0 });
+        object? control = Activator.CreateInstance(recognizerType, new object[] { classtype, displayMultiplier });
         return control as RecognizerControl;
     }
 
-    private RecognizerControl? GetRightRecognizerControl()
+    private RecognizerControl? GetRightRecognizerControl(double displayMultiplier)
     {
         string classtype = GetComboBoxSelectedContent(RightClassifier);
         string rectype = GetComboBoxSelectedTag(RightControl);
         Type? recognizerType = Type.GetType(rectype);
         if (recognizerType is null) return null;
-        object? control = Activator.CreateInstance(recognizerType, new object[] { classtype, 1.0 });
+        object? control = Activator.CreateInstance(recognizerType, new object[] { classtype, displayMultiplier });
         return control as RecognizerControl;
     }
 
