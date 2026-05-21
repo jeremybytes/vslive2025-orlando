@@ -9,6 +9,10 @@ You will learn:
 * Combine LINQ methods to filter, sort, and aggregate data based on the user's needs at runtime.  
 * See LINQ lazy evaluation in action (and how to avoid "eager" evaluation).  
 
+## Session Materials  
+* Slides: [SLIDES-LINQ.pdf](SLIDES-LINQ.pdf)  
+* Code Samples: [CodeSamples/](CodeSamples/)
+
 ## Microsoft Docs
 * [Query Expression Syntax Table](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/standard-query-operators-overview#query-expression-syntax-table)  
 Keywords and corresponding LINQ methods  

@@ -71,8 +71,8 @@ In addition, each lab builds on the previous. So the "Completed" of Lab 01 is th
 ## Resources  
 
 **Slides and Code Samples**  
-* [Workshop Slides](./SLIDES-csharp-workshop.pdf)  
-* [Code Samples](./DemoApps/)
+* [Workshop Slides](SLIDES-CSharp-Workshop.pdf)  
+* [Code Samples](DemoApps/dotnet9/)
 
 **Abstraction / Implementation**  
 * Article: [Drawbacks to Abstraction](http://jeremybytes.blogspot.com/2012/11/drawbacks-to-abstraction.html)  
